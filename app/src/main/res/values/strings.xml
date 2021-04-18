@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Workout App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in_to_your_account_and_start_working_out">Sign In to your account and start working out!</string>
+    <string name="new_user">New User?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="welcome">welcome back!</string>
+    <string name="enter_login_details">Enter Login Details</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="good_afternoon">good afternoon</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="register">Register</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_up_to_continue">Sign up to continue!</string>
+    <string name="enter_details">Enter Details</string>
+    <string name="your_name">Your Name</string>
+    <string name="email">Email</string>
+    <string name="age">Age</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+</resources>
