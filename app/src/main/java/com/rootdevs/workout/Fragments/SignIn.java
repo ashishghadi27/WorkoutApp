@@ -35,7 +35,7 @@ public class SignIn extends BaseFragment implements AuthView {
 
     private EditText email, pass;
     private RelativeLayout login;
-    private TextView signUp;
+    private TextView signUp, forgotPass;
     private AuthPresenter presenter;
     private ProgressDialog dialog;
 
@@ -62,6 +62,7 @@ public class SignIn extends BaseFragment implements AuthView {
         pass = view.findViewById(R.id.password);
         login = view.findViewById(R.id.login);
         signUp = view.findViewById(R.id.signUp);
+        forgotPass = view.findViewById(R.id.forgotPass);
         dialog = getProgressDialog("Authenticating", "Verifying Credentials", false, getContext());
         signUp.setOnClickListener(view1 ->{
             addFragment(new SignUp(), "Signup");
@@ -69,6 +70,10 @@ public class SignIn extends BaseFragment implements AuthView {
 
         login.setOnClickListener(view1 -> {
             loginIn(email.getText().toString().trim(), pass.getText().toString().trim());
+        });
+
+        forgotPass.setOnClickListener(view1 -> {
+            replaceFragment(new OtpVerification(), "OtpVerification");
         });
     }
 
@@ -90,6 +95,12 @@ public class SignIn extends BaseFragment implements AuthView {
         Log.v("SUCCESS RESP", jsonObject.toString());
         try {
             if(jsonObject.getString("message").equals("Valid User")){
+                JSONObject object = jsonObject.getJSONArray("response").getJSONObject(0);
+                saveUserDetails(object.getString("name"),
+                        object.getString("age"),
+                        object.getString("height"),
+                        object.getString("weight"),
+                        object.getString("email"));
                 Intent intent = new Intent(getActivity(), WorkoutActivity.class);
                 startActivity(intent);
                 Objects.requireNonNull(getActivity()).finish();
@@ -114,6 +125,26 @@ public class SignIn extends BaseFragment implements AuthView {
 
     @Override
     public void signUpFailure(VolleyError e) {
+
+    }
+
+    @Override
+    public void otpReceived(JSONObject object) {
+
+    }
+
+    @Override
+    public void otpError(VolleyError e) {
+
+    }
+
+    @Override
+    public void passUpdated(JSONObject object) {
+
+    }
+
+    @Override
+    public void passUpdateFailure(VolleyError e) {
 
     }
 

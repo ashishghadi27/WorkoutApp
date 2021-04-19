@@ -2,6 +2,7 @@ package com.rootdevs.workout.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -44,5 +45,16 @@ public class BaseFragment extends Fragment {
         builder.setMessage(message);
         builder.setCancelable(true);
         return builder.create();
+    }
+
+    public void saveUserDetails(String name, String age, String height, String weight, String email){
+        SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("userDetails",  Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("name", name);
+        editor.putString("age", age);
+        editor.putString("height", height);
+        editor.putString("weight", weight);
+        editor.putString("email", email);
+        editor.apply();
     }
 }

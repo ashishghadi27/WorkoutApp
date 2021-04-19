@@ -13,6 +13,7 @@ import com.rootdevs.workout.Interfaces.AuthView;
 import com.rootdevs.workout.utils.APICaller;
 import com.rootdevs.workout.utils.Constants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +40,19 @@ public class AuthPresenter implements ApiHandler {
         apiCaller.postCall(Constants.registerPostApi, jsonObject, Constants.registerPostRequestId);
     }
 
+    public void getOTP(String email){
+        view.showProgress();
+        apiCaller.getCall(Constants.getOtpApi + email, Constants.getOtpRequestId);
+    }
+
+    public void updatePass(String email, String password) throws JSONException{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("email", email);
+        jsonObject.put("password", password);
+        view.showProgress();
+        apiCaller.postCall(Constants.updatePassPostApi, jsonObject, Constants.updatePassRequestId);
+    }
+
     @Override
     public void success(JSONObject object, int requestId) {
         switch (requestId){
@@ -48,6 +62,14 @@ public class AuthPresenter implements ApiHandler {
                 break;
             case Constants.registerPostRequestId:
                 view.signUpSuccess(object);
+                view.hideProgress();
+                break;
+            case Constants.getOtpRequestId:
+                view.otpReceived(object);
+                view.hideProgress();
+                break;
+            case Constants.updatePassRequestId:
+                view.passUpdated(object);
                 view.hideProgress();
                 break;
         }
@@ -62,6 +84,14 @@ public class AuthPresenter implements ApiHandler {
                 break;
             case Constants.registerPostRequestId:
                 view.signUpFailure(e);
+                view.hideProgress();
+                break;
+            case Constants.getOtpRequestId:
+                view.otpError(e);
+                view.hideProgress();
+                break;
+            case Constants.updatePassRequestId:
+                view.passUpdateFailure(e);
                 view.hideProgress();
                 break;
         }

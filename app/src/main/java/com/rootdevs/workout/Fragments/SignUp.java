@@ -144,6 +144,26 @@ public class SignUp extends BaseFragment implements AuthView {
     }
 
     @Override
+    public void otpReceived(JSONObject object) {
+
+    }
+
+    @Override
+    public void otpError(VolleyError e) {
+
+    }
+
+    @Override
+    public void passUpdated(JSONObject object) {
+
+    }
+
+    @Override
+    public void passUpdateFailure(VolleyError e) {
+
+    }
+
+    @Override
     public void showProgress() {
         dialog.show();
     }
