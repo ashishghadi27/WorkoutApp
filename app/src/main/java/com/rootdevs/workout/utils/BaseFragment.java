@@ -47,9 +47,10 @@ public class BaseFragment extends Fragment {
         return builder.create();
     }
 
-    public void saveUserDetails(String name, String age, String height, String weight, String email){
+    public void saveUserDetails(String id, String name, String age, String height, String weight, String email){
         SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("userDetails",  Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("id", id);
         editor.putString("name", name);
         editor.putString("age", age);
         editor.putString("height", height);
@@ -57,4 +58,15 @@ public class BaseFragment extends Fragment {
         editor.putString("email", email);
         editor.apply();
     }
+
+    public String getUserId(){
+        SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("userDetails",  Context.MODE_PRIVATE);
+        return preferences.getString("id", null);
+    }
+
+    public String getEmailAddress(){
+        SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("userDetails",  Context.MODE_PRIVATE);
+        return preferences.getString("email", null);
+    }
+
 }

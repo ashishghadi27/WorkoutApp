@@ -96,7 +96,8 @@ public class SignIn extends BaseFragment implements AuthView {
         try {
             if(jsonObject.getString("message").equals("Valid User")){
                 JSONObject object = jsonObject.getJSONArray("response").getJSONObject(0);
-                saveUserDetails(object.getString("name"),
+                saveUserDetails(object.getString("id"),
+                        object.getString("name"),
                         object.getString("age"),
                         object.getString("height"),
                         object.getString("weight"),

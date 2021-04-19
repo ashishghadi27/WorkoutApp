@@ -1,7 +1,7 @@
 package com.rootdevs.workout.utils;
 public class Constants {
 
-    private static final String domain = "http://192.168.1.105:";
+    private static final String domain = "http://192.168.248.22:";
     private static final String portNo = "8070";
     private static final String domainSuffix = "/workout/index.php/";
     private static final String finalDomain = domain + portNo + domainSuffix;
@@ -24,7 +24,7 @@ public class Constants {
     public static final String updatePassPostApi = finalDomain + "updatePass";
     public static final int updatePassRequestId = 1006;
 
-    public static final String getWorkoutsApi = finalDomain + "getWorkouts?userId=";
+    public static final String getWorkoutsApi = finalDomain + "getWorkouts?userId=%s&date=%s";
     public static final int getWorkoutsRequestId = 1007;
 
     public static final String getSessionsApi = finalDomain + "getSessions?workoutId=";
@@ -35,5 +35,8 @@ public class Constants {
 
     public static final String getOtpApi = finalDomain + "getOtp?email=";
     public static final int getOtpRequestId = 1010;
+
+    public static final String getWorkoutsByMonthGetApi = finalDomain + "getWorkoutsByMonth?userId=%s&mon=%s";
+    public static final int getWorkoutsByMonthRequestId = 1011;
 
 }

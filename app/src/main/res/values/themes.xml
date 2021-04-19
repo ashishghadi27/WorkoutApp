@@ -3,7 +3,7 @@
     <style name="Theme.WorkoutApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">#C8C8C8</item>
         <item name="colorOnPrimary">#494848</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <item name="android:colorControlActivated">@color/colorAccent</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

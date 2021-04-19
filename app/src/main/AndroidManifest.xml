@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/Theme.WorkoutApp">
         <activity android:name=".Activities.WorkoutActivity"></activity>
         <activity android:name=".Activities.AuthActivity">

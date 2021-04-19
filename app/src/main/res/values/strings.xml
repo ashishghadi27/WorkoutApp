@@ -38,4 +38,6 @@
     <string name="update_smal_password">update password</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="or">or</string>
+    <string name="calendar">Calendar</string>
+    <string name="workouts">Workouts</string>
 </resources>
