@@ -1,5 +1,6 @@
 package com.rootdevs.workout.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,10 +16,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.rootdevs.workout.Activities.ExerciseFromAPIActivity;
 import com.rootdevs.workout.Adapters.ExerciseAdapter;
 import com.rootdevs.workout.Interfaces.DataAccessor;
+import com.rootdevs.workout.Interfaces.SessionCardClickListener;
 import com.rootdevs.workout.Models.Exercise;
 import com.rootdevs.workout.R;
 import com.rootdevs.workout.utils.BaseFragment;
@@ -31,6 +35,7 @@ public class ExerciseFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private ExerciseAdapter adapter;
     private LinearLayout addExercise;
+    private TextView sessionName;
 
 
     public ExerciseFragment(DataAccessor accessor) {
@@ -55,7 +60,10 @@ public class ExerciseFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         addExercise = view.findViewById(R.id.addExercise);
-
+        sessionName = view.findViewById(R.id.sessionName);
+        if(this.accessor.getSession() != null){
+            sessionName.setText(this.accessor.getSession().getName() + "");
+        }
         addExercise.setOnClickListener(view1 -> {
             addExercise();
         });
@@ -107,6 +115,5 @@ public class ExerciseFragment extends BaseFragment {
         });
 
     }
-
 
 }

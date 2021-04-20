@@ -1,5 +1,6 @@
 package com.rootdevs.workout.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,9 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.rootdevs.workout.Activities.ExerciseFromAPIActivity;
 import com.rootdevs.workout.Adapters.ExerciseAdapter;
 import com.rootdevs.workout.Adapters.SessionAdapter;
 import com.rootdevs.workout.Interfaces.DataAccessor;
+import com.rootdevs.workout.Interfaces.SessionCardClickListener;
 import com.rootdevs.workout.Interfaces.SessionsView;
 import com.rootdevs.workout.Models.Session;
 import com.rootdevs.workout.Models.Workout;
@@ -37,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class WorkoutFragment extends BaseFragment implements SessionsView {
+public class WorkoutFragment extends BaseFragment implements SessionsView, SessionCardClickListener {
 
     private boolean hasSessions = false;
     private RelativeLayout workoutDataLay, noSessionsLay;
@@ -83,6 +86,7 @@ public class WorkoutFragment extends BaseFragment implements SessionsView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         workoutDataLay = view.findViewById(R.id.workoutDataLay);
         noSessionsLay = view.findViewById(R.id.noSessionsLay);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -93,7 +97,7 @@ public class WorkoutFragment extends BaseFragment implements SessionsView {
         addSession = view.findViewById(R.id.addSession);
         accessor.setWorkoutData(workout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        Log.v("Click in workout", clickedDate);
+        //Log.v("Click in workout", clickedDate);
         if(!dateMatches(clickedDate, getCompleteCurrentDate())){
             addSession.setVisibility(View.GONE);
         }
@@ -181,16 +185,28 @@ public class WorkoutFragment extends BaseFragment implements SessionsView {
                             object1.getString("name"),
                             object1.getString("workoutId")));
                 }
-                adapter = new SessionAdapter(sessionList, getContext());
+                adapter = new SessionAdapter(sessionList, getContext(), this);
                 recyclerView.setAdapter(adapter);
             }
+            else getAlertDialog("No Data", "No Sessions Found", getContext()).show();
         } catch (JSONException e) {
             e.printStackTrace();
+            getAlertDialog("No Data", "No Sessions Found", getContext()).show();
         }
     }
 
     @Override
     public void sessionDataFailure(VolleyError e) {
+        getAlertDialog("ERROR", "Server error Occurred", getContext()).show();
+    }
+
+    @Override
+    public void getExercisesSuccess(JSONObject object) {
+
+    }
+
+    @Override
+    public void getExercisesFailure(VolleyError e) {
 
     }
 
@@ -202,5 +218,13 @@ public class WorkoutFragment extends BaseFragment implements SessionsView {
     @Override
     public void hideProgress() {
 
+    }
+
+    @Override
+    public void toExerciseActivity(String sessionName, String sessionId) {
+        Intent intent = new Intent(getContext(), ExerciseFromAPIActivity.class);
+        intent.putExtra("sessionName", sessionName);
+        intent.putExtra("sessionId", sessionId);
+        startActivity(intent);
     }
 }

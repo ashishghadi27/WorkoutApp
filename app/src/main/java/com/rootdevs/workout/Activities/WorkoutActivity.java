@@ -3,6 +3,7 @@ package com.rootdevs.workout.Activities;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,18 +31,20 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
     private Session session;
     private List<Exercise> excerciseList = new ArrayList<>();
     private Workout workout;
-
+    private BottomNavigationView navView;
+    private MenuItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
         presenter = new WorkoutPresenter(this, this);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         replaceFragment(new CalendarFragment(this), "Calendar");
         dialog = getProgressDialog("Calendar", "Fetching Workout Data", false, this);
         navView.setOnNavigationItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) menuItem -> {
 
+            this.item = menuItem;
             int choice  = menuItem.getItemId();
 
             switch (choice){
@@ -141,5 +144,10 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
     @Override
     public void setWorkoutData(Workout workoutData) {
         this.workout = workoutData;
+    }
+
+    @Override
+    public void setSelected() {
+        navView.getMenu().getItem(1).setChecked(true);
     }
 }

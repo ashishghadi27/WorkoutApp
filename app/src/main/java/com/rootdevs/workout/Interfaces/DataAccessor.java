@@ -14,4 +14,5 @@ public interface DataAccessor {
     void setExerciseList(List<Exercise> exerciseList);
     void setSession(Session session);
     void setWorkoutData(Workout workoutData);
+    void setSelected();
 }

@@ -7,6 +7,8 @@ import org.json.JSONObject;
 public interface SessionsView {
     void sessionDataSuccess(JSONObject object);
     void sessionDataFailure(VolleyError e);
+    void getExercisesSuccess(JSONObject object);
+    void getExercisesFailure(VolleyError e);
     void showProgress();
     void hideProgress();
 }

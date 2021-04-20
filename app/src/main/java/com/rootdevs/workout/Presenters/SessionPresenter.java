@@ -26,11 +26,20 @@ public class SessionPresenter implements ApiHandler {
         apiCaller.getCall(Constants.getSessionsApi + workOutId, Constants.getSessionsRequestId);
     }
 
+    public void getExercises(String sessionId){
+        sessionsView.showProgress();
+        apiCaller.getCall(Constants.getExcercisesApi + sessionId, Constants.getExcercisesRequestId);
+    }
+
     @Override
     public void success(JSONObject object, int requestId) {
         switch (requestId){
             case Constants.getSessionsRequestId:
                 sessionsView.sessionDataSuccess(object);
+                sessionsView.hideProgress();
+                break;
+            case Constants.getExcercisesRequestId:
+                sessionsView.getExercisesSuccess(object);
                 sessionsView.hideProgress();
                 break;
         }
@@ -41,6 +50,10 @@ public class SessionPresenter implements ApiHandler {
         switch (requestId){
             case Constants.getSessionsRequestId:
                 sessionsView.sessionDataFailure(e);
+                sessionsView.hideProgress();
+                break;
+            case Constants.getExcercisesRequestId:
+                sessionsView.getExercisesFailure(e);
                 sessionsView.hideProgress();
                 break;
         }

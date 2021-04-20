@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.rootdevs.workout.Interfaces.SessionCardClickListener;
 import com.rootdevs.workout.Models.Exercise;
 import com.rootdevs.workout.Models.Session;
 import com.rootdevs.workout.R;
@@ -20,6 +21,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.MyViewHo
 
     private List<Session> listItems;
     private Context context;
+    private SessionCardClickListener cardClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -34,8 +36,9 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.MyViewHo
 
     }
 
-    public SessionAdapter(List<Session> list, Context context) {
+    public SessionAdapter(List<Session> list, Context context, SessionCardClickListener cardClickListener) {
         this.listItems = list;
+        this.cardClickListener = cardClickListener;
     }
 
 
@@ -54,7 +57,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.MyViewHo
         final Session session = listItems.get(position);
         holder.sessionName.setText(session.getName());
         holder.cardView.setOnClickListener(view -> {
-
+            this.cardClickListener.toExerciseActivity(session.getName(), session.getId());
         });
     }
 

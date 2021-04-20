@@ -114,7 +114,6 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
         WorkoutFragment fragment = new WorkoutFragment(accessor);
         Bundle bundle = new Bundle();
         bundle.putString("clickedDate", date.getDay() + "-" + date.getMonth() + "-" + date.getYear());
-        Log.v("CLICKED",date.getDay() + "-" + date.getMonth() + "-" + date.getYear());
         if(index != -1){
             Workout temp = workoutList.get(index);
             bundle.putString("id", temp.getId());
@@ -124,7 +123,8 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
             bundle.putString("endTime", temp.getEndTime());
         }
         fragment.setArguments(bundle);
-        addFragment(fragment, "workout");
+        this.accessor.setSelected();
+        replaceFragment(fragment, "workout");
     }
 
     private void markDates(List<DateData> dates){

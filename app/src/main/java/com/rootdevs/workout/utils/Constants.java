@@ -30,7 +30,7 @@ public class Constants {
     public static final String getSessionsApi = finalDomain + "getSessions?workoutId=";
     public static final int getSessionsRequestId = 1008;
 
-    public static final String getExcercisesApi = finalDomain + "getExcercises?sessionId=1";
+    public static final String getExcercisesApi = finalDomain + "getExcercises?sessionId=";
     public static final int getExcercisesRequestId = 1009;
 
     public static final String getOtpApi = finalDomain + "getOtp?email=";
