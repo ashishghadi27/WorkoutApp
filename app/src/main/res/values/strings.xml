@@ -40,4 +40,19 @@
     <string name="or">or</string>
     <string name="calendar">Calendar</string>
     <string name="workouts">Workouts</string>
+    <string name="enter_session_name">Enter Session Name</string>
+    <string name="session_name">Session Name</string>
+    <string name="note_this_session_name_cannot_be_updated_later">Note: This session name cannot be updated later</string>
+    <string name="this_is_some_random_comment_for_visualization_purpose">This is some random comment. For visualization purpose</string>
+    <string name="comment">Comment</string>
+    <string name="dead_lift">Dead Lift</string>
+    <string name="_25">25</string>
+    <string name="kilos">Kilos</string>
+    <string name="reps">Reps:</string>
+    <string name="_20">20</string>
+    <string name="sets">Sets:</string>
+    <string name="_50">50</string>
+    <string name="plus">+</string>
+    <string name="note_all_fields_are_mandatory">Note: All fields are mandatory</string>
+    <string name="add_exercise">Add Exercise</string>
 </resources>

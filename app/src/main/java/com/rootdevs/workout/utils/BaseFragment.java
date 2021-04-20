@@ -1,19 +1,23 @@
 package com.rootdevs.workout.utils;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.rootdevs.workout.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 public class BaseFragment extends Fragment {
-
-
 
     public void addFragment(Fragment fragment, String tag){
         Objects.requireNonNull(getActivity()).getSupportFragmentManager()
@@ -67,6 +71,80 @@ public class BaseFragment extends Fragment {
     public String getEmailAddress(){
         SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("userDetails",  Context.MODE_PRIVATE);
         return preferences.getString("email", null);
+    }
+
+    public String getCurrentDate(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-yyyy ");
+        Date date = new Date();
+        return formatter.format(date);
+    }
+
+    public String getCompleteCurrentDate(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy ");
+        Date date = new Date();
+        return formatter.format(date);
+    }
+
+    public String getCompleteCurrentDateWithTimeStamp(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        Date date = new Date();
+        return formatter.format(date);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public String timeIn12HrFormat(String date) throws ParseException{
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+        Date date1 = dateFormat.parse(date);
+        dateFormat = new SimpleDateFormat("hh:mm aa");
+        assert date1 != null;
+        String formattedDate = dateFormat.format(date1);
+        return formattedDate;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public String parseDate(String d) throws ParseException {
+        //d = d.replace("-", "/");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date1 = formatter.parse(d);
+        SimpleDateFormat format = new SimpleDateFormat("d");
+        assert date1 != null;
+        String date = format.format(date1);
+        if(date.endsWith("1") && !date.endsWith("11"))
+            format = new SimpleDateFormat("MMMM d'st', yyyy");
+        else if(date.endsWith("2") && !date.endsWith("12"))
+            format = new SimpleDateFormat("MMMM d'nd', yyyy");
+        else if(date.endsWith("3") && !date.endsWith("13"))
+            format = new SimpleDateFormat("MMMM d'rd', yyyy");
+        else
+            format = new SimpleDateFormat("MMMM d'th', yyyy");
+        return format.format(date1);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public String getDayOfWeek(String date) throws ParseException {
+        SimpleDateFormat format1=new SimpleDateFormat("dd-MM-yyyy");
+        Date dt1= null;
+        dt1 = format1.parse(date);
+        DateFormat format2=new SimpleDateFormat("EEEE");
+        assert dt1 != null;
+        return format2.format(dt1);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public boolean dateMatches(String date1, String date2){
+        SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Date d1 = format.parse(date1);
+            Date d2 = format.parse(date2);
+            Log.v("Date1: " , d1.toString() + "");
+            Log.v("Date2: " , d2.toString() + "");
+            if(d1.toString().equals(d2.toString())){
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

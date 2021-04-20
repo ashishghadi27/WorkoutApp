@@ -1,6 +1,7 @@
 package com.rootdevs.workout.Fragments;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.CalendarView;
 import android.widget.DatePicker;
 
 import com.android.volley.VolleyError;
+import com.rootdevs.workout.Interfaces.DataAccessor;
 import com.rootdevs.workout.Interfaces.WorkoutView;
 import com.rootdevs.workout.Models.Workout;
 import com.rootdevs.workout.Presenters.WorkoutPresenter;
@@ -45,9 +47,11 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
     private WorkoutPresenter presenter;
     private List<DateData> list;
     private List<Workout> workoutList;
+    private ProgressDialog dialog;
+    private DataAccessor accessor;
 
-    public CalendarFragment() {
-        // Required empty public constructor
+    public CalendarFragment(DataAccessor accessor) {
+        this.accessor = accessor;
     }
 
     @Override
@@ -70,6 +74,7 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCalendarView = ((MCalendarView) view.findViewById(R.id.calendar));
+        dialog = getProgressDialog("Calendar", "Fetching Workout Data", false, getContext());
         initialize();
         mCalendarView.setOnMonthChangeListener(new OnMonthChangeListener() {
             @Override
@@ -86,15 +91,40 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
                 Log.v("Day: ",date.getDay() + "");
                 Log.v("Month: ",date.getMonth() + "");
                 Log.v("Year: ",date.getYear() + "");
+                goToWorkoutFragment(date);
             }
         });
     }
 
     private void initialize(){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-yyyy ");
-        Date date = new Date();
-        String apiMon = formatter.format(date);
-        presenter.getWorkoutsByMonth(getUserId(), apiMon);
+        presenter.getWorkoutsByMonth(getUserId(), getCurrentDate());
+    }
+
+    private int getWorkoutFromList(DateData d){
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).equals(d)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void goToWorkoutFragment(DateData date){
+        int index = getWorkoutFromList(date);
+        WorkoutFragment fragment = new WorkoutFragment(accessor);
+        Bundle bundle = new Bundle();
+        bundle.putString("clickedDate", date.getDay() + "-" + date.getMonth() + "-" + date.getYear());
+        Log.v("CLICKED",date.getDay() + "-" + date.getMonth() + "-" + date.getYear());
+        if(index != -1){
+            Workout temp = workoutList.get(index);
+            bundle.putString("id", temp.getId());
+            bundle.putString("name", temp.getName());
+            bundle.putString("date", temp.getDate());
+            bundle.putString("startTime", temp.getStartTime());
+            bundle.putString("endTime", temp.getEndTime());
+        }
+        fragment.setArguments(bundle);
+        addFragment(fragment, "workout");
     }
 
     private void markDates(List<DateData> dates){
@@ -133,7 +163,7 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
 
     @Override
     public void workoutsByMonthFailed(VolleyError e) {
-
+        getAlertDialog("Calendar", "Server Error", getContext()).show();
     }
 
     @Override
@@ -148,11 +178,11 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
 
     @Override
     public void showProgress() {
-
+        dialog.show();
     }
 
     @Override
     public void hideProgress() {
-
+        dialog.dismiss();
     }
 }

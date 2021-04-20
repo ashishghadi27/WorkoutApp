@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.WorkoutApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryVariant">#C8C8C8</item>
         <item name="colorOnPrimary">#494848</item>
         <!-- Secondary brand color. -->

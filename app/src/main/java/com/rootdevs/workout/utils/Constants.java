@@ -1,7 +1,7 @@
 package com.rootdevs.workout.utils;
 public class Constants {
 
-    private static final String domain = "http://192.168.248.22:";
+    private static final String domain = "http://192.168.1.102:";
     private static final String portNo = "8070";
     private static final String domainSuffix = "/workout/index.php/";
     private static final String finalDomain = domain + portNo + domainSuffix;

@@ -91,12 +91,12 @@ public class SignUp extends BaseFragment implements AuthView {
         emailStr = email.getText().toString().trim();
         passwordStr = password.getText().toString().trim();
         confirmPassStr = confirmPass.getText().toString().trim();
-        boolean isEmpty = TextUtils.isEmpty(nameStr) &&
-                TextUtils.isEmpty(ageStr) &&
-                TextUtils.isEmpty(heightStr) &&
-                TextUtils.isEmpty(weightStr) &&
-                TextUtils.isEmpty(emailStr) &&
-                TextUtils.isEmpty(passwordStr) &&
+        boolean isEmpty = TextUtils.isEmpty(nameStr) ||
+                TextUtils.isEmpty(ageStr) ||
+                TextUtils.isEmpty(heightStr) ||
+                TextUtils.isEmpty(weightStr) ||
+                TextUtils.isEmpty(emailStr) ||
+                TextUtils.isEmpty(passwordStr) ||
                 TextUtils.isEmpty(confirmPassStr);
         if(!isEmpty){
             if(EmailValidation.validateEmail(emailStr)){
