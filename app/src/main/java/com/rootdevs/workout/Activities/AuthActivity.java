@@ -28,4 +28,9 @@ public class AuthActivity extends BaseActivity {
             finish();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        getBackDialog(this).show();
+    }
 }
