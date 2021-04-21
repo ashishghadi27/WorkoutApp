@@ -15,4 +15,5 @@ public interface DataAccessor {
     void setSession(Session session);
     void setWorkoutData(Workout workoutData);
     void setSelected();
+    void saveData();
 }

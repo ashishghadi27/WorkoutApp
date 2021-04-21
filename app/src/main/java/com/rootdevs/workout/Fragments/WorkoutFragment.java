@@ -95,9 +95,11 @@ public class WorkoutFragment extends BaseFragment implements SessionsView, Sessi
         startTime = view.findViewById(R.id.startTime);
         endTime = view.findViewById(R.id.endTime);
         addSession = view.findViewById(R.id.addSession);
-        accessor.setWorkoutData(workout);
+        if(accessor.getWorkoutData() == null && workout != null)
+            accessor.setWorkoutData(workout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        //Log.v("Click in workout", clickedDate);
+        Log.v("Click in workout", clickedDate);
+        Log.v("Current timestamp", getCompleteCurrentDateWithTimeStamp());
         if(!dateMatches(clickedDate, getCompleteCurrentDate())){
             addSession.setVisibility(View.GONE);
         }
@@ -150,12 +152,15 @@ public class WorkoutFragment extends BaseFragment implements SessionsView, Sessi
             String sessName = sessionName.getText().toString().trim();
             if(!TextUtils.isEmpty(sessName)){
                 try {
-                    if(accessor.getWorkoutData() == null)
-                        accessor.setWorkoutData(new Workout(null,
+                    if(accessor.getWorkoutData() == null) {
+                        Workout w = new Workout(null,
                                 parseDate(getCompleteCurrentDate()),
                                 getCompleteCurrentDate(),
-                                getCompleteCurrentDateWithTimeStamp(),
-                                null));
+                                null,
+                                null);
+                        w.setStartTime(getCompleteCurrentDateWithTimeStampForDB());
+                        accessor.setWorkoutData(w);
+                    }
                     accessor.setSession(new Session(null, sessName, null));
                     ExerciseFragment fragment = new ExerciseFragment(accessor);
                     Bundle bundle = new Bundle();

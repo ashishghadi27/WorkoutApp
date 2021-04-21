@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,14 +58,18 @@ public class BaseActivity extends AppCompatActivity {
 
     public AlertDialog getAlertDialog(String title, String message, Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(message);
+        View dialog = View.inflate(context, R.layout.alert_lay, null);
+        TextView titleText = dialog.findViewById(R.id.title);
+        TextView messageText = dialog.findViewById(R.id.message);
+        titleText.setText(title);
+        messageText.setText(message);
+        builder.setView(dialog);
         builder.setCancelable(true);
         return builder.create();
     }
 
-    public String getCompleteCurrentDateWithTimeStamp(){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    public String getCompleteCurrentDateWithTimeStampForDB(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date date = new Date();
         return formatter.format(date);
     }

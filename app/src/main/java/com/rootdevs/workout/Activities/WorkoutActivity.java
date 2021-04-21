@@ -10,10 +10,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rootdevs.workout.Fragments.CalendarFragment;
 import com.rootdevs.workout.Fragments.WorkoutFragment;
 import com.rootdevs.workout.Interfaces.DataAccessor;
+import com.rootdevs.workout.Interfaces.SaveAllDataView;
 import com.rootdevs.workout.Interfaces.WorkoutView;
 import com.rootdevs.workout.Models.Exercise;
 import com.rootdevs.workout.Models.Session;
 import com.rootdevs.workout.Models.Workout;
+import com.rootdevs.workout.Presenters.SaveDataPresenter;
 import com.rootdevs.workout.Presenters.WorkoutPresenter;
 import com.rootdevs.workout.R;
 import com.rootdevs.workout.utils.BaseActivity;
@@ -24,9 +26,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAccessor {
+public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAccessor, SaveAllDataView {
 
     private WorkoutPresenter presenter;
+    private SaveDataPresenter saveDataPresenter;
     private ProgressDialog dialog;
     private Session session;
     private List<Exercise> excerciseList = new ArrayList<>();
@@ -39,6 +42,7 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
         presenter = new WorkoutPresenter(this, this);
+        saveDataPresenter = new SaveDataPresenter(this, this);
         navView = findViewById(R.id.nav_view);
         replaceFragment(new CalendarFragment(this), "Calendar");
         dialog = getProgressDialog("Calendar", "Fetching Workout Data", false, this);
@@ -87,13 +91,14 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
                 bundle.putString("date", jsonObject1.getString("date"));
                 bundle.putString("startTime", jsonObject1.getString("startTime"));
                 bundle.putString("endTime", jsonObject1.getString("endTime"));
-                fragment.setArguments(bundle);
+
                 workout = new Workout(jsonObject1.getString("id"),
                         jsonObject1.getString("name"),
                         jsonObject1.getString("date"),
                         jsonObject1.getString("startTime"),
                         jsonObject1.getString("endTime"));
             }
+            fragment.setArguments(bundle);
             addFragmentAct(fragment,"workout");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -104,6 +109,70 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
     @Override
     public void workoutByDateFailed(VolleyError e) {
         getAlertDialog("Error", "Server Error", this).show();
+    }
+
+    @Override
+    public void saveWorkoutSuccess(JSONObject object) {
+        try {
+            if(object.getString("message").equals("Success")){
+                session.setWorkOutId(object.getString("response"));
+                workout.setId(object.getString("response"));
+                if(session.getId() == null)
+                    saveDataPresenter.addSession(session);
+            }
+            else getAlertDialog("Data Save failure", "Server Error", this).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            getAlertDialog("Data Save failure", "Server Error", this).show();
+        }
+    }
+
+    @Override
+    public void saveWorkoutFailure(VolleyError e) {
+        getAlertDialog("Data Save failure", "Server Error", this).show();
+    }
+
+    @Override
+    public void saveSessionSuccess(JSONObject object) {
+        try {
+            if(object.getString("message").equals("Insert Success")){
+                session.setId(object.getString("response"));
+                saveDataPresenter.addExercises(excerciseList, object.getString("response"));
+            }
+            else getAlertDialog( "Saving Session failed", "Data Parse Error. PLease Try again after some time", this).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            getAlertDialog( "Saving Session failed", "Server Error", this).show();
+        }
+    }
+
+    @Override
+    public void saveSessionFailure(VolleyError e) {
+        getAlertDialog( "Saving Session failed", "Server Error", this).show();
+    }
+
+    @Override
+    public void saveExercisesSuccess(JSONObject object) {
+        try {
+            if(object.getString("message").equals("Insert Success")){
+                session = null;
+                workout = null;
+                excerciseList.clear();
+                Log.v("Here", "Clicking");
+                if(!navView.findViewById(R.id.calendar).performClick()){
+                    replaceFragment(new CalendarFragment(this), "Calendar");
+                }
+            }
+            else getAlertDialog( "Saving Exercises failed", "Data Parse Error. PLease Try again after some time", this).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            getAlertDialog( "Saving Session failed", "Server Error", this).show();
+        }
+    }
+
+    @Override
+    public void saveExercisesFailure(VolleyError e) {
+
     }
 
     @Override
@@ -149,5 +218,21 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
     @Override
     public void setSelected() {
         navView.getMenu().getItem(1).setChecked(true);
+    }
+
+    @Override
+    public void saveData() {
+        workout.setEndTime(getCompleteCurrentDateWithTimeStampForDB());
+        if(workout.getId() == null){
+            saveDataPresenter.addWorkout(workout, getUserId());
+        }
+        else if(session.getId() == null) {
+            session.setWorkOutId(workout.getId());
+            saveDataPresenter.addSession(session);
+        }
+        else {
+            saveDataPresenter.addExercises(excerciseList, session.getId());
+        }
+
     }
 }

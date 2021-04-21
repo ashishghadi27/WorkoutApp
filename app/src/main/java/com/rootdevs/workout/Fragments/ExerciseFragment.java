@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class ExerciseFragment extends BaseFragment {
     private ExerciseAdapter adapter;
     private LinearLayout addExercise;
     private TextView sessionName;
-
+    private ImageView saveSession;
 
     public ExerciseFragment(DataAccessor accessor) {
         this.accessor = accessor;
@@ -61,15 +62,21 @@ public class ExerciseFragment extends BaseFragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         addExercise = view.findViewById(R.id.addExercise);
         sessionName = view.findViewById(R.id.sessionName);
+        saveSession = view.findViewById(R.id.saveSession);
         if(this.accessor.getSession() != null){
             sessionName.setText(this.accessor.getSession().getName() + "");
         }
-        addExercise.setOnClickListener(view1 -> {
-            addExercise();
-        });
         adapter = new ExerciseAdapter(accessor.getExerciseList(), getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+
+        addExercise.setOnClickListener(view1 -> {
+            addExercise();
+        });
+
+        saveSession.setOnClickListener(view1 -> {
+            accessor.saveData();
+        });
     }
 
     private void addExercise(){
