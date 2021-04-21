@@ -2,12 +2,14 @@ package com.rootdevs.workout.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -16,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.rootdevs.workout.Activities.AuthActivity;
 import com.rootdevs.workout.Interfaces.DataAccessor;
 import com.rootdevs.workout.Interfaces.WorkoutView;
 import com.rootdevs.workout.Models.Workout;
@@ -49,6 +54,7 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
     private List<Workout> workoutList;
     private ProgressDialog dialog;
     private DataAccessor accessor;
+    private ImageView signOut;
 
     public CalendarFragment(DataAccessor accessor) {
         this.accessor = accessor;
@@ -74,6 +80,7 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCalendarView = ((MCalendarView) view.findViewById(R.id.calendar));
+        signOut = view.findViewById(R.id.signOut);
         dialog = getProgressDialog("Calendar", "Fetching Workout Data", false, getContext());
         initialize();
         mCalendarView.setOnMonthChangeListener(new OnMonthChangeListener() {
@@ -83,6 +90,10 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
                 Log.v("Year change", year + "");
                 presenter.getWorkoutsByMonth(getUserId(), month + "-" + year);
             }
+        });
+
+        signOut.setOnClickListener(view1 -> {
+            signOutPrompt();
         });
 
         mCalendarView.setOnDateClickListener(new OnDateClickListener() {
@@ -184,5 +195,30 @@ public class CalendarFragment extends BaseFragment implements WorkoutView {
     @Override
     public void hideProgress() {
         dialog.dismiss();
+    }
+
+    private void signOutPrompt(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialog = View.inflate(getContext(), R.layout.backpressed_lay, null);
+        TextView titleText = dialog.findViewById(R.id.title);
+        TextView messageText = dialog.findViewById(R.id.message);
+        titleText.setText("Sign Out");
+        messageText.setText("Do you want to sign out?");
+        TextView yes = dialog.findViewById(R.id.yes);
+        TextView no = dialog.findViewById(R.id.no);
+        builder.setView(dialog);
+        builder.setCancelable(false);
+        AlertDialog d = builder.create();
+        d.show();
+        yes.setOnClickListener(view -> {
+            signOut();
+            Intent i = new Intent(getContext(), AuthActivity.class);
+            startActivity(i);
+            getActivity().finish();
+        });
+
+        no.setOnClickListener(view -> {
+            d.dismiss();
+        });
     }
 }

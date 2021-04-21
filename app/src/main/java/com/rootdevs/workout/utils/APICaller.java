@@ -3,6 +3,7 @@ package com.rootdevs.workout.utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -31,6 +32,10 @@ public class APICaller {
                     Log.v("Response:", error.getCause() + "    " + error.getMessage());
                     handler.failure(error, requestId);
                 });
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         this.queue.add(request);
     }
 

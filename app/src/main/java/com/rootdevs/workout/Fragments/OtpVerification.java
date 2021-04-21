@@ -36,6 +36,7 @@ public class OtpVerification extends BaseFragment implements AuthView {
     private String otp = "";
     private AuthPresenter presenter;
     private ProgressDialog dialog;
+    private boolean otpSent = false;
 
     public OtpVerification() {
         // Required empty public constructor
@@ -68,7 +69,8 @@ public class OtpVerification extends BaseFragment implements AuthView {
         signUp = view.findViewById(R.id.signUp);
         dialog = getProgressDialog("Password Reset", "Sending OTP", false, getContext());
         getOTP.setOnClickListener(view1 -> {
-            sendOtp();
+            if(!otpSent)
+                sendOtp();
         });
 
         verify.setOnClickListener(view1 -> {
@@ -91,7 +93,8 @@ public class OtpVerification extends BaseFragment implements AuthView {
         });
 
         resend.setOnClickListener(view1 -> {
-            sendOtp();
+            if(!otpSent)
+                sendOtp();
         });
 
         signIn.setOnClickListener(view1 -> {
@@ -104,6 +107,7 @@ public class OtpVerification extends BaseFragment implements AuthView {
     }
 
     private void sendOtp(){
+        otpSent = true;
         String emailStr = email.getText().toString().trim();
         if(!TextUtils.isEmpty(emailStr)){
             if(EmailValidation.validateEmail(emailStr)){
@@ -136,7 +140,7 @@ public class OtpVerification extends BaseFragment implements AuthView {
 
     @Override
     public void otpReceived(JSONObject object) {
-
+        otpSent = false;
         try {
             if(object.getString("message").equals("Success")){
                 this.otp = object.getJSONObject("response").getString("otp");
@@ -156,6 +160,7 @@ public class OtpVerification extends BaseFragment implements AuthView {
 
     @Override
     public void otpError(VolleyError e) {
+        otpSent = false;
         Log.v("Error", e.getCause() + "   " + e.getMessage());
         getAlertDialog("ERROR", "Some Server Error Occurred", getContext()).show();
     }

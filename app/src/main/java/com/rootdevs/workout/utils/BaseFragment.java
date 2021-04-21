@@ -159,4 +159,11 @@ public class BaseFragment extends Fragment {
         return false;
     }
 
+    public void signOut(){
+        SharedPreferences preferences = Objects.requireNonNull(getContext()).getSharedPreferences("userDetails",  Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
 }
