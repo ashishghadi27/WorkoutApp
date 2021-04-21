@@ -50,7 +50,7 @@ public class ExerciseFromAPIActivity extends BaseActivity implements SessionsVie
         noExercise = findViewById(R.id.noExercise);
         sessionName = findViewById(R.id.sessionName);
         sessionName.setText(name);
-        adapter = new ExerciseAdapter(exerciseList, this);
+        adapter = new ExerciseAdapter(exerciseList, this, true, null);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         Log.v("SessionId:", sessionId);

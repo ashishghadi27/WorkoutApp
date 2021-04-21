@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.rootdevs.workout.Activities.ExerciseFromAPIActivity;
 import com.rootdevs.workout.Adapters.ExerciseAdapter;
 import com.rootdevs.workout.Interfaces.DataAccessor;
+import com.rootdevs.workout.Interfaces.ExerciseCardOperations;
 import com.rootdevs.workout.Interfaces.SessionCardClickListener;
 import com.rootdevs.workout.Models.Exercise;
 import com.rootdevs.workout.R;
@@ -30,7 +31,7 @@ import com.rootdevs.workout.utils.BaseFragment;
 
 import java.util.Objects;
 
-public class ExerciseFragment extends BaseFragment {
+public class ExerciseFragment extends BaseFragment implements ExerciseCardOperations {
 
     private DataAccessor accessor;
     private RecyclerView recyclerView;
@@ -66,7 +67,7 @@ public class ExerciseFragment extends BaseFragment {
         if(this.accessor.getSession() != null){
             sessionName.setText(this.accessor.getSession().getName() + "");
         }
-        adapter = new ExerciseAdapter(accessor.getExerciseList(), getContext());
+        adapter = new ExerciseAdapter(accessor.getExerciseList(), getContext(), false, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
 
@@ -123,4 +124,9 @@ public class ExerciseFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void deleteExercise(int index) {
+        accessor.getExerciseList().remove(index);
+        adapter.notifyDataSetChanged();
+    }
 }

@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.rootdevs.workout.Interfaces.ExerciseCardOperations;
 import com.rootdevs.workout.Models.Exercise;
 import com.rootdevs.workout.R;
 
@@ -18,14 +20,14 @@ import java.util.List;
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder> {
 
     private List<Exercise> listItems;
-    private Context context;
-
-
+    private boolean hide;
+    private ExerciseCardOperations cardOperations;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView exerciseName, sets, reps, weight, comment;
         MaterialCardView cardView;
+        ImageView delete;
 
         public MyViewHolder(View view) {
             super(view);
@@ -34,13 +36,16 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
             reps = view.findViewById(R.id.reps);
             weight = view.findViewById(R.id.weight);
             comment = view.findViewById(R.id.comment);
-            cardView =view.findViewById(R.id.card);
+            cardView = view.findViewById(R.id.card);
+            delete = view.findViewById(R.id.delete);
         }
 
     }
 
-    public ExerciseAdapter(List<Exercise> list, Context context) {
+    public ExerciseAdapter(List<Exercise> list, Context context, boolean hide, ExerciseCardOperations cardOperations) {
         this.listItems = list;
+        this.hide = hide;
+        this.cardOperations = cardOperations;
     }
 
 
@@ -62,9 +67,15 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
         holder.sets.setText(exercise.getSets());
         holder.reps.setText(exercise.getReps());
         holder.comment.setText(exercise.getComment());
-        holder.cardView.setOnClickListener(view -> {
 
-        });
+        if(hide){
+            holder.delete.setVisibility(View.GONE);
+        }
+        else {
+            holder.delete.setOnClickListener(view -> {
+                cardOperations.deleteExercise(position);
+            });
+        }
     }
 
     @Override
