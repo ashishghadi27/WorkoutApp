@@ -68,6 +68,25 @@ public class BaseActivity extends AppCompatActivity {
         return builder.create();
     }
 
+    public AlertDialog getBackDialog(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        View dialog = View.inflate(context, R.layout.backpressed_lay, null);
+        TextView yes = dialog.findViewById(R.id.yes);
+        TextView no = dialog.findViewById(R.id.no);
+        builder.setView(dialog);
+        builder.setCancelable(false);
+        AlertDialog d = builder.create();
+        yes.setOnClickListener(view -> {
+            finish();
+        });
+
+        no.setOnClickListener(view -> {
+            d.dismiss();
+        });
+        return d;
+    }
+
     public String getCompleteCurrentDateWithTimeStampForDB(){
         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date date = new Date();

@@ -55,4 +55,7 @@
     <string name="plus">+</string>
     <string name="note_all_fields_are_mandatory">Note: All fields are mandatory</string>
     <string name="add_exercise">Add Exercise</string>
+    <string name="exit_app">Exit App</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

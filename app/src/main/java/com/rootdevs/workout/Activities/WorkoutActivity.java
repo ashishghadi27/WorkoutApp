@@ -117,6 +117,8 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
             if(object.getString("message").equals("Success")){
                 session.setWorkOutId(object.getString("response"));
                 workout.setId(object.getString("response"));
+                dialog.setTitle("Session");
+                dialog.setMessage("Saving Session to database.");
                 if(session.getId() == null)
                     saveDataPresenter.addSession(session);
             }
@@ -136,6 +138,8 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
     public void saveSessionSuccess(JSONObject object) {
         try {
             if(object.getString("message").equals("Insert Success")){
+                dialog.setTitle("Exercise");
+                dialog.setMessage("Saving Exercises to database.");
                 session.setId(object.getString("response"));
                 saveDataPresenter.addExercises(excerciseList, object.getString("response"));
             }
@@ -158,6 +162,8 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
                 session = null;
                 workout = null;
                 excerciseList.clear();
+                dialog.setTitle("Calendar");
+                dialog.setMessage("Fetching Workout Data");
                 Log.v("Here", "Clicking");
                 if(!navView.findViewById(R.id.calendar).performClick()){
                     replaceFragment(new CalendarFragment(this), "Calendar");
@@ -172,7 +178,7 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
 
     @Override
     public void saveExercisesFailure(VolleyError e) {
-
+        getAlertDialog( "Saving Exercises failed", "Data Parse Error. PLease Try again after some time", this).show();
     }
 
     @Override
@@ -224,15 +230,26 @@ public class WorkoutActivity extends BaseActivity implements WorkoutView, DataAc
     public void saveData() {
         workout.setEndTime(getCompleteCurrentDateWithTimeStampForDB());
         if(workout.getId() == null){
+            dialog.setTitle("Workout");
+            dialog.setMessage("Saving Workout to database.");
             saveDataPresenter.addWorkout(workout, getUserId());
         }
         else if(session.getId() == null) {
+            dialog.setTitle("Session");
+            dialog.setMessage("Saving Session to database.");
             session.setWorkOutId(workout.getId());
             saveDataPresenter.addSession(session);
         }
         else {
+            dialog.setTitle("Exercise");
+            dialog.setMessage("Saving Exercises to database.");
             saveDataPresenter.addExercises(excerciseList, session.getId());
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        getBackDialog(this).show();
     }
 }
